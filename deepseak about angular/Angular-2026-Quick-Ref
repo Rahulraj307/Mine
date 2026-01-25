@@ -1,0 +1,321 @@
+# Angular 2026 Interview Quick Reference Card
+
+## ⚡ The 30-Second Elevator Pitch
+
+"Angular 2026 is signals-first. Signal Forms replace Reactive Forms, zoneless is default, Vitest tests are 10x faster, and templates use @if/@for/@switch. Everything centers on signals for reactivity and performance."
+
+---
+
+## 🔥 TOP 20 INTERVIEW QUESTIONS FOR 2026
+
+### 1. "What are Signal Forms and why do they matter?"
+**Answer:** Signal Forms use the `model()` directive to combine signals with ngModel for automatic two-way binding. They're type-safe, require zero boilerplate (no FormBuilder), and integrate perfectly with zoneless change detection. They're the new standard, replacing Reactive Forms.
+
+### 2. "Explain zoneless change detection."
+**Answer:** Zoneless removes Zone.js dependency. Instead of detecting every async operation, only signal mutations trigger change detection. This is more precise and 60-80% faster because we only detect actual state changes, not every timer/promise/request.
+
+### 3. "Why Vitest over Karma?"
+**Answer:** Vitest is 10x faster, ESM-first (modern), requires minimal setup, and has better TypeScript integration. TestBed stays the same, so migration is just changing the runner. Karma was designed for older JavaScript.
+
+### 4. "What's @defer for?"
+**Answer:** @defer lazy-loads components. Unlike *ngIf (creates but hides), @defer doesn't create the component until needed (scroll into view, click, etc.). This reduces initial bundle and improves Time-to-Interactive.
+
+### 5. "What's the difference between @if and *ngIf?"
+**Answer:** @if is JavaScript-like syntax, generates more efficient code, compiles to better instructions, and fails at compile time if wrong. *ngIf is implicit behavior. @if is cleaner and safer.
+
+### 6. "Build a form with Signal Forms."
+**Answer:** 
+```typescript
+user = model<User>({ firstName: '', email: '' });
+isValid = computed(() => user().email.includes('@'));
+// Template: <input [(ngModel)]="user().firstName">
+```
+
+### 7. "How would you migrate Reactive Forms to Signal Forms?"
+**Answer:** Convert FormBuilder groups to objects, replace FormControl instances with signals, convert validation to computed signals, update templates from formControlName to [(ngModel)]. Test each form component individually.
+
+### 8. "What's the performance difference in zoneless?"
+**Answer:** Zone.js intercepts every async (setTimeout, Promise, HTTP). In a typical 3-minute user session with searching, network requests, and interactions, Zone.js might trigger 100+ unnecessary change detections. Zoneless reduces this to 5-10 precise triggers. Huge difference.
+
+### 9. "Explain signals vs BehaviorSubject."
+**Answer:** Signals are synchronous, simpler API, don't need subscription/unsubscription, work with zoneless, integrate with change detection automatically. BehaviorSubject is RxJS (older pattern), requires unsubscription, more verbose. Signals are the 2026 standard.
+
+### 10. "How do you test signals?"
+**Answer:** Test signal mutations and computed values directly:
+```typescript
+service.count.set(5);
+expect(service.count()).toBe(5);
+expect(service.doubled()).toBe(10);
+```
+No subscriptions needed. Fast and simple with Vitest.
+
+### 11. "What's the 'track' function in @for?"
+**Answer:** `track` tells Angular how to identify items for efficient DOM reuse. Without it, Angular assumes position tracking (slow). With it, `track item.id` tells Angular "reuse DOM if the ID is the same". Essential for performance.
+
+### 12. "Build a search component with debounce using signals."
+**Answer:** 
+```typescript
+searchTerm = signal('');
+results = computed(() => {
+  // Computed signals are memoized
+  // Call API only if search term changes
+  return this.api.search(this.searchTerm());
+});
+// No manual debounce needed if computed is efficient
+// Or use: http.get + switchMap for cancellation
+```
+
+### 13. "How do you handle dependent form fields with Signal Forms?"
+**Answer:** Use computed signals. If email changes, auto-validate password strength:
+```typescript
+passwordStrength = computed(() => {
+  const pwd = user().password;
+  return pwd.length > 8 ? 'strong' : 'weak';
+});
+```
+
+### 14. "Explain 'effect' in signals."
+**Answer:** `effect(() => { console.log(signal()) })` runs side effects when signal changes. Used for logging, external API calls, or imperative updates. Tracks signal dependencies automatically. Runs asynchronously.
+
+### 15. "What's the performance gain with OnPush + signals?"
+**Answer:** OnPush says "only check if inputs changed or event fired". With signals, components check only their own signals (not parent state). This dramatically reduces change detection scope. Combined with zoneless, you get precise, minimal change detection.
+
+### 16. "How do you prevent memory leaks in signal apps?"
+**Answer:** Signals automatically cleanup when component destroys. No manual unsubscription needed (unlike Observables). Effects also cleanup automatically. Main thing: don't create signals in component scope that outlive component. Use service-level signals instead.
+
+### 17. "Design a user list with pagination using signals."
+**Answer:** 
+```typescript
+currentPage = signal(1);
+pageSize = signal(10);
+users = resource({
+  request: () => ({ page: currentPage(), size: pageSize() }),
+  loader: ({ request }) => http.get('/users', request)
+});
+// Resource handles loading/error/loaded states automatically
+```
+
+### 18. "Compare signal-based vs service-based state management."
+**Answer:** Signal-based: Services expose signals directly, components read them. Simple, performant. Service-based: Services manage logic, components call methods. More encapsulation. For 2026, signal-based is the trend.
+
+### 19. "How does Vitest differ from Karma for Angular testing?"
+**Answer:** Vitest runs in Node (fast), uses Vite bundler (modern), requires less config, has built-in coverage. Karma was browser-based (slow), complex setup. TestBed API identical, so existing tests work. Switch is just the runner.
+
+### 20. "What's your migration strategy for a legacy app to modern Angular?"
+**Answer:** 
+1. Enable zoneless (ensure all state uses signals)
+2. Convert key services to signals (not all at once)
+3. Update critical components to OnPush
+4. Migrate forms to Signal Forms (per feature)
+5. Test thoroughly (Vitest is faster for this)
+6. Update templates (@if/@for as you modify)
+7. Update bundle analysis (should reduce by 30-40%)
+
+---
+
+## 💡 SENIOR LEVEL: ARCHITECTURE QUESTIONS
+
+### "Design a large app with 500+ components using signals."
+
+**Structure:**
+```
+state/
+  ├─ user.service.ts (user signal + computed)
+  ├─ auth.service.ts (auth logic)
+  ├─ data.service.ts (API calls)
+features/
+  ├─ dashboard/
+  │  ├─ dashboard.component.ts (container)
+  │  └─ widgets/ (presentational)
+  ├─ profile/
+  └─ settings/
+```
+
+**Key patterns:**
+- Services own signals (not components)
+- Components read signals via inject()
+- Computed signals for derived data
+- Effects only in services
+- OnPush for all components
+- Lazy-load features via routes
+
+### "How would you optimize a slow Angular app?"
+
+**Checklist:**
+1. Profile: Use DevTools performance tab
+2. Signals: Are non-mutable state using signals?
+3. OnPush: All components using ChangeDetectionStrategy.OnPush?
+4. Zoneless: Enabled? Zone.js overhead eliminated?
+5. @defer: Are heavy components lazy-loaded?
+6. trackBy: All *ngFor using track? (use @for instead)
+7. Unsubscribe: Any memory leaks from subscriptions?
+8. Bundle: Analyze with `ng build --stats-json`
+9. Lazy routes: Feature modules lazy-loaded?
+10. Computed: Are you computing expensive calculations?
+
+### "Design an authentication system for a large app."
+
+**Architecture:**
+```typescript
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  private _currentUser = signal<User | null>(null);
+  currentUser = this._currentUser.asReadonly();
+  
+  isAuthenticated = computed(() => !!this._currentUser());
+  isAdmin = computed(() => this._currentUser()?.role === 'admin');
+  
+  login(creds: Credentials): Observable<void> {
+    return this.http.post('/auth/login', creds).pipe(
+      tap(response => {
+        this._currentUser.set(response.user);
+        localStorage.setItem('token', response.token);
+      }),
+      catchError(err => {
+        console.error('Login failed');
+        return throwError(() => err);
+      })
+    );
+  }
+  
+  logout() {
+    this._currentUser.set(null);
+    localStorage.removeItem('token');
+  }
+}
+
+// Guards (functional style)
+export const authGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  if (auth.isAuthenticated()) return true;
+  inject(Router).navigate(['/login']);
+  return false;
+};
+
+// Component
+@Component({
+  template: `
+    @if (isAuthenticated()) {
+      <app-dashboard></app-dashboard>
+      <button (click)="logout()">Logout</button>
+    } @else {
+      <app-login></app-login>
+    }
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class AppComponent {
+  isAuthenticated = inject(AuthService).isAuthenticated;
+  
+  logout() {
+    inject(AuthService).logout();
+  }
+}
+```
+
+---
+
+## 🚨 RED FLAGS (Things That Hurt Your Interview)
+
+❌ "I use Reactive Forms because they're more powerful"
+✅ Say: "Signal Forms are the new standard, simpler, and automatic with zoneless"
+
+❌ "Zone.js is mandatory for change detection"
+✅ Say: "Zoneless is default in Angular 21, Zone.js is optional and deprecated"
+
+❌ "I test with Karma"
+✅ Say: "Vitest is the new test runner, 10x faster"
+
+❌ "I use *ngIf and *ngFor everywhere"
+✅ Say: "I use @if, @for, and @switch in modern code"
+
+❌ "BehaviorSubject is my state management"
+✅ Say: "I use signals for state, they're simpler and more performant"
+
+❌ "I don't understand signals yet"
+✅ Say: "Signals are core to modern Angular, happy to deep dive"
+
+---
+
+## 🎓 PRE-INTERVIEW CHECKLIST (24 Hours Before)
+
+- [ ] Can you explain Signal Forms vs Reactive Forms?
+- [ ] Can you code a signal-based service from memory?
+- [ ] Can you explain zoneless in 2 minutes?
+- [ ] Can you write @if, @for, @switch without thinking?
+- [ ] Can you design a form with Signal Forms?
+- [ ] Do you understand `computed` and `effect`?
+- [ ] Can you explain why @defer matters?
+- [ ] Can you name 3 performance benefits of signals?
+- [ ] Do you know what `track` does in @for?
+- [ ] Can you explain the migration path from Reactive → Signal Forms?
+
+**If you said NO to any of these, review that section.**
+
+---
+
+## ⏰ DURING THE INTERVIEW
+
+### First 5 Minutes (Build Trust)
+- Mention: "I'm current with Angular 21 standards"
+- Show: "I understand signals, zoneless, and Signal Forms"
+- Hint: "Modern Angular is signals-first, much cleaner"
+
+### When They Ask "Tell Us About Angular"
+Give this answer (90 seconds):
+```
+"Angular 21 is signals-first. Reactive state uses signals (simpler than BehaviorSubject), 
+forms use Signal Forms (type-safe, zero boilerplate), change detection is zoneless by 
+default (60-80% fewer CD cycles), templates use @if/@for/@switch (cleaner), and tests 
+run on Vitest (10x faster). The overall pattern is: signals for reactivity, services 
+for state, OnPush for optimization, and zoneless for performance."
+```
+
+### When They Ask "What's Your Strength?"
+Say: "I'm really strong with modern signal-based architecture and performance optimization. I love designing systems that are simple to understand but highly efficient."
+
+### When They Ask "What's a Challenge You've Overcome?"
+Good answer: "Migrating a legacy Reactive Forms app to Signal Forms. I created a pattern where forms became 60% simpler, validation was automatic, and tests ran 10x faster with Vitest."
+
+---
+
+## 🎯 FINAL TIPS
+
+**1. Speak with Confidence**
+- Don't say "I think" or "I guess"
+- Say "Signal Forms are the standard because..."
+- Own your knowledge
+
+**2. Show You Know WHY**
+- Don't just say "use signals" 
+- Explain "signals integrate with zoneless change detection, automatically tracking dependencies"
+
+**3. Demonstrate Pattern Knowledge**
+- Mention specific patterns: smart/dumb components, service-based state, etc.
+- Show you've thought about scalability
+
+**4. Ask Good Questions**
+- "What's your team's change detection strategy?"
+- "Are you using signals yet or still on Reactive Forms?"
+- "What's your testing setup, Vitest or Jest?"
+
+**5. Be Honest About Gaps**
+- "I haven't used [X] yet, but I understand the concepts"
+- "I'd love to learn more about [Y]"
+- This is better than pretending to know
+
+---
+
+## 📞 CLOSING STATEMENT
+
+"I'm excited about modern Angular. The shift from Reactive Forms to Signal Forms, Zone.js to Zoneless, and Karma to Vitest represents a framework that's getting cleaner, faster, and more intuitive. I'm committed to staying current with these patterns and bringing them to any team I join."
+
+**This shows:**
+- ✅ You're current (2026 knowledge)
+- ✅ You understand the "why" (not just syntax)
+- ✅ You care about code quality
+- ✅ You're team-oriented (bringing knowledge to team)
+
+---
+
+**Good luck! You've got this! 🚀**
