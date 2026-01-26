@@ -1,79 +1,73 @@
-# 12 Interview Q&A Master List
+# 📘 Interview Master Handbook: MEAN Stack (Zero to Hero)
 
-> **Goal**: Your last-minute revision handbook. Sorted by role depth.
-
----
-
-## 🟢 Fresher (0-2 Years)
-**Goal**: Syntax, Basic Concepts, "What is X?"
-
-### HTML/CSS
-1.  **Q: Box Model?**
-    *   A: Content + Padding + Border + Margin. `box-sizing: border-box` makes width include padding/border.
-2.  **Q: `display: flex` vs `grid`?**
-    *   A: Flex is 1D (Row/Col). Grid is 2D.
-3.  **Q: Semantic HTML?**
-    *   A: Using tags with meaning (`<nav>`, `<article>`) for a11y and SEO.
-4.  **Q: Specificity?**
-    *   A: Inline > ID > Class > Tag.
-
-### JavaScript
-1.  **Q: `let` vs `var` vs `const`?**
-    *   A: `var` is function scoped & hoisted. `let/const` are block scoped. `const` cannot be reassigned.
-2.  **Q: `==` vs `===`?**
-    *   A: `==` coerces type. `===` checks both value and type.
-3.  **Q: What is a Promise?**
-    *   A: An object representing async completion (Success/Failure).
-4.  **Q: `null` vs `undefined`?**
-    *   A: `undefined` = declared but not set. `null` = explicitly set to nothing.
+> Your **one-stop comprehensive resource** for MEAN stack interview preparation – from Fresher to Senior Engineer.
 
 ---
 
-## 🟡 Mid-Level (2-5 Years)
-**Goal**: Internals, "How does X work?", Optimization.
+## 🎯 How to Use This Guide
 
-### JavaScript
-1.  **Q: Explain Event Loop.**
-    *   A: Call Stack -> Web APIs -> Callback Queue -> Event Loop -> Stack. Microtasks (Promises) run before Macrotasks (setTimeout).
-2.  **Q: What is a Closure?**
-    *   A: A function bundled with its lexical environment. Usage: Data privacy, Currying.
-3.  **Q: `this` keyword rules?**
-    *   A: 1. `new` binding. 2. Explicit (`call/apply`). 3. Implicit (`obj.func()`). 4. Default (Global). Arrow functions inherit `this`.
-
-### Angular
-1.  **Q: Change Detection Strategy?**
-    *   A: `Default` checks everything on every event. `OnPush` checks only on Input reference change or Async Pipe.
-2.  **Q: RxJS `switchMap` vs `mergeMap`?**
-    *   A: `switchMap` cancels previous. `mergeMap` runs parallel.
-3.  **Q: Dependency Injection (Hierarchical)?**
-    *   A: Reviewing providers up the DOM tree. Shadowing creating new instances.
+1.  **Start with your weakest area.**
+2.  **Read the Q&A file thoroughly.** Each question has answers suitable for Fresher → Senior levels.
+3.  **Practice explaining concepts out loud.** If you can't explain it simply, you don't understand it.
+4.  **Review code examples.** Be ready to write similar code on a whiteboard.
 
 ---
 
-## 🔴 Senior / Principal (5+ Years)
-**Goal**: Design Choices, Trade-offs, "Why NOT use X?", System Design.
+## 📂 Table of Contents
 
-### Architecture
-1.  **Q: Monolith vs Micro-Frontends?**
-    *   A: Monolith is easier to manage/deploy. MFE allows independent team deployments but adds massive complexity (shared deps, consistency). Prefer Modular Monolith (Nx) first.
-2.  **Q: Scaling Node.js?**
-    *   A: Clustering (Vertical), Load Balancing (Horizontal), Caching (Redis), Offloading CPU tasks to Workers/Microservices.
-3.  **Q: Handling 1 Million WebSocket connections?**
-    *   A: Need multiple servers. Use Redis Pub/Sub to broadcast messages across servers. Max open file descriptors (ulimit) on OS level.
+### 🌐 Frontend
 
-### Angular Enterprise
-1.  **Q: Performance optimization in massive list?**
-    *   A: Virtual Scroll (render viewport only), OnPush, splitting heavy processing to Web Workers (Partytown).
-2.  **Q: Ngrx - to use or not?**
-    *   A: **NOT** for simple CRUD. **YES** for shared state complexity, race condition handling, undo/redo requirements.
+| Topic | Description | File |
+| :--- | :--- | :--- |
+| **HTML** | Semantic HTML, Accessibility, SEO, Critical Rendering Path | [HTML_Master_QnA.md](./HTML_Master_QnA.md) |
+| **CSS** | Box Model, Flexbox, Grid, Responsive Design, Performance | [CSS_Master_QnA.md](./CSS_Master_QnA.md) |
+| **JavaScript** | Core, Async, Closures, Event Loop, Memory Management | [JS_Master_QnA.md](./JS_Master_QnA.md) |
+| **TypeScript** | Types, Interfaces, Generics, Utility Types, tsconfig | [TypeScript_Master_QnA.md](./TypeScript_Master_QnA.md) |
+| **Angular** | Lifecycle, Standalone, Signals, Zoneless, Migration (v12→v21) | [Angular_Master_QnA.md](./Angular_Master_QnA.md) |
+| **RxJS** | Observables, Subjects, Operators, Memory Leak Prevention | [RxJS_Master_QnA.md](./RxJS_Master_QnA.md) |
 
 ---
 
-## 🧠 Behavioral (STAR Method)
-**S**ituation, **T**ask, **A**ction, **R**esult.
+### 🖥️ Backend
 
-1.  **Q: Tell me about a time you disagreed with a Tech Lead.**
-    *   *Tip*: Focus on the data/proof you gathered, not the emotion. "I built a prototype to prove approach B improved LCP by 20%."
-2.  **Q: A critical bug in production. What do you do?**
-    *   *Tip*: 1. Rollback/Fix. 2. Communicate. 3. Post-Mortem (Root Cause Analysis).
+| Topic | Description | File |
+| :--- | :--- | :--- |
+| **Node.js** | Event Loop, Clustering, Streams, Performance, Security | [Node_Master_QnA.md](./Node_Master_QnA.md) |
+| **MongoDB** | Document Modeling, Aggregation Pipelines, Indexing, Sharding | [MongoDB_Master_QnA.md](./MongoDB_Master_QnA.md) |
 
+---
+
+### 🛠️ DevOps & Tooling
+
+| Topic | Description | File |
+| :--- | :--- | :--- |
+| **Testing & Tooling** | Jasmine, Jest, TestBed, ESLint, SonarQube, Webpack | [Testing_Tooling_Master_QnA.md](./Testing_Tooling_Master_QnA.md) |
+| **AWS Deployment** | S3, CloudFront, SPA Routing Fix, CI/CD with GitHub Actions | [AWS_CloudFront_Deployment.md](./AWS_CloudFront_Deployment.md) |
+
+---
+
+### 📊 Experience-Based Q&A
+
+| Level | Description | Folder |
+| :--- | :--- | :--- |
+| Fresher (0-2 Years) | Core concepts, syntax, basic usage | [fresher-0-2-years/](./fresher-0-2-years/) |
+| Mid-Level (2-4 Years) | "How does it work?", Debugging, Trade-offs | [mid-2-4-years/](./mid-2-4-years/) |
+| Senior (4+ Years) | Architecture, Performance, Leadership, Design | [senior-4-plus-years/](./senior-4-plus-years/) |
+| System Design | Frontend architecture, Scalability | [system-design/](./system-design/) |
+
+---
+
+## 🏁 Quick Start Path (8-Week Plan)
+
+| Week | Focus |
+| :--- | :--- |
+| 1-2 | JavaScript (Core, Async, Event Loop) |
+| 3-4 | Angular (Lifecycle, RxJS, Signals, Change Detection) |
+| 5 | TypeScript + Node.js |
+| 6 | MongoDB + Testing |
+| 7 | System Design + Deployment |
+| 8 | Mock Interviews + Review |
+
+---
+
+> **Pro Tip:** Don't just read. Teach. Explaining a concept to a "rubber duck" (or a friend) is the best way to solidify understanding.

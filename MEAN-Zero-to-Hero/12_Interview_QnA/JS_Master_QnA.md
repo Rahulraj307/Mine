@@ -225,6 +225,45 @@ JS uses **Mark and Sweep** algorithm. Reachable objects are kept; others are del
 *   **Debounce**: "Wait for silence." Only run after user STOPS typing for X ms. (Search bars).
 *   **Throttle**: "Rate limit." Run at most once every X ms. (Scroll events, Window resize).
 
+**Full Debounce Implementation:**
+```javascript
+function debounce(fn, delay) {
+  let timerId;
+  return function(...args) {
+    clearTimeout(timerId); // Cancel previous timer
+    timerId = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+// Usage
+const handleSearch = debounce((query) => {
+  console.log('Searching for:', query);
+}, 300);
+
+inputElement.addEventListener('input', (e) => handleSearch(e.target.value));
+```
+
+**Full Throttle Implementation:**
+```javascript
+function throttle(fn, limit) {
+  let inThrottle = false;
+  return function(...args) {
+    if (!inThrottle) {
+      fn.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
+// Usage
+const handleScroll = throttle(() => {
+  console.log('Scroll event fired');
+}, 100);
+
+window.addEventListener('scroll', handleScroll);
+```
+
 ### 2️⃣0️⃣ Generator Functions
 **Answer:**
 Functions that can be paused and resumed using `function*` and `yield`.

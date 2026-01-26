@@ -85,12 +85,78 @@ Node is single-threaded. To use a Multi-Core CPU:
 2.  **PM2**: Process Manager. `pm2 start app.js -i max`. Auto-restarts crashes and handles clustering.
 3.  **Horizontal Scaling**: Add more servers behind a Load Balancer (Nginx / AWS ALB).
 
+**Cluster Module Code Example:**
+```javascript
+const cluster = require('cluster');
+const http = require('http');
+const os = require('os');
+
+if (cluster.isPrimary) {
+  const numCPUs = os.cpus().length;
+  console.log(`Primary ${process.pid} is running. Forking ${numCPUs} workers.`);
+
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`Worker ${worker.process.pid} died. Forking a new one.`);
+    cluster.fork(); // Auto-restart crashed workers
+  });
+} else {
+  // Workers can share any TCP connection
+  http.createServer((req, res) => {
+    res.writeHead(200);
+    res.end(`Hello from Worker ${process.pid}\n`);
+  }).listen(8000);
+
+  console.log(`Worker ${process.pid} started`);
+}
+```
+
 ### 🔟 Dealing with CPU-Intensive Tasks
 **Answer:**
 **Don't** block the Event Loop.
 1.  **Worker Threads**: `worker_threads` module runs JS in parallel threads (Memory shared).
 2.  **Child Process**: `spawn()` or `fork()` a separate process (e.g., Python script for Data Science).
 3.  **Microservices**: Offload heavy processing (Video encoding, PDF gen) to a separate service/queue (RabbitMQ/Redis).
+
+### 1️⃣0️⃣ Streams – Handling Large Data
+**Answer:**
+Streams process data piece-by-piece (chunks) instead of loading everything into memory at once. Essential for large files.
+
+**Stream Types:** `Readable`, `Writable`, `Duplex`, `Transform`.
+
+**Example: Reading a Large File**
+```javascript
+const fs = require('fs');
+const readStream = fs.createReadStream('large-file.csv', { encoding: 'utf8' });
+
+readStream.on('data', (chunk) => {
+  console.log(`Received ${chunk.length} bytes of data.`);
+  // Process chunk here (e.g., parse CSV rows)
+});
+
+readStream.on('end', () => {
+  console.log('Finished reading file.');
+});
+
+readStream.on('error', (err) => {
+  console.error('Error reading file:', err);
+});
+```
+
+**Piping Streams:**
+```javascript
+const fs = require('fs');
+const zlib = require('zlib');
+
+// Read file -> Compress -> Write to new file
+fs.createReadStream('input.txt')
+  .pipe(zlib.createGzip())
+  .pipe(fs.createWriteStream('input.txt.gz'));
+```
+
 
 ---
 

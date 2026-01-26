@@ -163,7 +163,64 @@ We don't copy-paste headers in every API call. We use Interceptors (Functional I
 2.  **ErrorInterceptor**: Catches `401 Unauthorized` → Redirects to Login. Catches `500` → Shows Toastr notification.
 3.  **LoadingInterceptor**: Shows a global spinner when a request starts, hides when it ends.
 
+### 1️⃣5️⃣ Functional Interceptors (v18+ Code)
+**Answer:**
+```typescript
+// auth.interceptor.ts
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { AuthService } from './auth.service';
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+  const token = authService.getToken();
+
+  if (token) {
+    const clonedReq = req.clone({
+      setHeaders: { Authorization: `Bearer ${token}` }
+    });
+    return next(clonedReq);
+  }
+  return next(req);
+};
+
+// app.config.ts (Registering)
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './auth.interceptor';
+
+export const appConfig = {
+  providers: [
+    provideHttpClient(withInterceptors([authInterceptor]))
+  ]
+};
+```
+
+### 1️⃣6️⃣ Functional Guards (v18+ Code)
+**Answer:**
+```typescript
+// auth.guard.ts
+import { CanActivateFn, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { AuthService } from './auth.service';
+
+export const authGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  if (authService.isLoggedIn()) {
+    return true;
+  }
+  return router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
+};
+
+// app.routes.ts (Registering)
+export const routes: Routes = [
+  { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] }
+];
+```
+
 ---
+
 
 ## 🔥 Part 5: Rapid Fire (Senior Check)
 
