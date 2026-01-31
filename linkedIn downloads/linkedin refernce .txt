@@ -1,0 +1,415 @@
+Angular Performance Optimization – Interview Questions
+How can you reduce change detection cycles in Angular?
+When should you use OnPush Change Detection to improve performance?
+How does using *trackBy in ngFor improve rendering performance?
+What strategies can you use to optimize large lists in Angular?
+How does lazy loading improve application startup time?
+How can preloading strategies help performance?
+How do standalone components improve performance?
+How can you reduce bundle size in an Angular application?
+How does AOT compilation improve runtime performance?
+What are the benefits of using the async pipe over manual subscriptions?
+How can RxJS operators help prevent unnecessary API calls?
+How do you optimize HTTP requests in Angular?
+How does server-side rendering (Angular Universal) improve perceived performance?
+How can caching be implemented to improve Angular app performance?
+How do pure pipes help performance compared to impure pipes?
+How can Zone.js optimizations or zoneless Angular improve performance?
+What is the role of web workers in improving performance?
+How can virtual scrolling improve performance for large datasets?
+How do you identify and fix memory leaks in Angular?
+What tools do you use to measure and improve Angular performance?
+
+
+---------------
+
+Important Insight:
+For 3–5 years of experience, nearly 60–70% of questions come from these core areas.
+
+Interviewers expect real-time use cases, not just textbook answers.
+
+JavaScript Questions
+
+ 1️⃣ What is Closure and how does it work in JavaScript?
+ 2️⃣ What is Hoisting?
+ 3️⃣ What is Temporal Dead Zone (TDZ)?
+ 4️⃣ How does memory allocation work in JavaScript?
+ 5️⃣ What is Event Bubbling and Event Capturing?
+ 6️⃣ How do you prevent Event Bubbling?
+ 7️⃣ What is Event Delegation?
+ 8️⃣ Explain Callback functions.
+ 9️⃣ List down ES6 features.
+ 🔟 Difference between Spread operator and Rest operator.
+ 1️⃣1️⃣ Scope difference between var, let, and const.
+ 1️⃣2️⃣ Guess the output: loop with var and accessing it outside the loop.
+ 1️⃣3️⃣ Guess the output: loop with let and accessing it outside the loop.
+ 1️⃣4️⃣ What is the current version of ECMAScript?
+ 1️⃣5️⃣ Explain Promises.
+ 1️⃣6️⃣ Difference between Promise.all and Promise.race.
+
+CSS & UI Fundamentals
+
+ 1️⃣ Explain CSS Box Model.
+ 2️⃣ Position properties in CSS.
+ 3️⃣ How do you write media queries?
+ 4️⃣ Explain Bootstrap Grid system.
+ 5️⃣ Difference between display: none and visibility: hidden.
+
+Angular Questions (Scenario Based)
+
+ 1️⃣ What are the building blocks of Angular?
+ 2️⃣ Difference between AngularJS and Angular (2+)?
+ 3️⃣ What is routing and why is it needed?
+ 4️⃣ With Angular 17+ standalone components, AppModule is gone. What changed?
+ 5️⃣ Difference between Template-driven and Reactive Forms.
+ 6️⃣ What is the purpose of Services in Angular?
+ 7️⃣ How do you share data between components?
+ 8️⃣ What if components don’t have a parent-child relationship?
+ 9️⃣ Difference between Subject and BehaviorSubject.
+ 🔟 How to open a Bootstrap modal without using bootstrap.js?
+ 1️⃣1️⃣ Handling large forms using multi-step or stepper forms.
+ 1️⃣2️⃣ How do you handle API errors at a single place?
+ 1️⃣3️⃣ How do you show a loader when API data takes time to load?
+ 1️⃣4️⃣ What is @HostListener and Renderer?
+ 1️⃣5️⃣ Explain @HostListener using a custom directive.
+ 1️⃣6️⃣ What are Signals in Angular?
+ 1️⃣7️⃣ Difference between set() and update() in Signals.
+
+Project & Work Culture Questions
+
+ 1️⃣ Where do you keep your codebase repository?
+ 2️⃣ Do you raise Pull Requests?
+ 3️⃣ Who reviews your PRs?
+ 4️⃣ Are you using GitHub Copilot during development?
+ 5️⃣ Have you written unit test cases?
+
+-------------------
+
+🔁 Iteration
+arr.forEach(fn) // Loop without return
+arr.map(fn) // Transform array
+
+🔍 Search & Check
+arr.find(fn) // First match
+arr.findIndex(fn)// Index of match
+arr.includes(x) // true / false
+arr.some(fn) // Any match?
+arr.every(fn) // All match?
+
+🎯 Filter & Reduce
+arr.filter(fn) // Subset
+arr.reduce(fn, i)// Accumulate to single value
+
+🔀 Add / Remove
+arr.push(x) // Add end
+arr.pop() // Remove end
+arr.unshift(x) // Add start
+arr.shift() // Remove start
+
+✂️ Modify
+arr.slice(a, b) // Non-mutating copy
+arr.splice(a,n) // Mutates array
+
+🔃 Reorder
+arr.sort(fn) // Sort
+arr.reverse() // Reverse
+
+🔗 Combine & Convert
+arr.concat(b) // Merge arrays
+arr.join(',') // Array → String
+Array.from(x) // Convert to array
+
+📦 Flatten & Fill
+arr.flat(n) // Flatten depth n
+arr.fill(x) // Fill values
+
+--------
+Top 9 HTTP Methods You Must Know as a Web Developer 👇
+
+If you work with web development or APIs, you’ll use HTTP request methods all the time. Each method instructs the server on the action you want it to take.
+
+Let’s go through them step by step 👇
+
+[1.] GET → Retrieves data from the server.
+◾ Think of it like reading a book — you only view the pages, you don’t change anything.
+
+[2.] POST → Sends new data to the server.
+◾ Like adding a new contact to your phone.
+
+[3.] PUT → Updates a resource completely.
+◾ Imagine replacing an old note with a new one.
+
+[4.] PATCH → Updates part of a resource.
+◾ Like fixing one line in your note instead of rewriting everything.
+
+[5.] DELETE → Removes a resource from the server.
+◾ Once it’s gone, it stays gone — even if you repeat the request.
+
+[6.] OPTIONS → Asks the server what actions are allowed.
+◾ Like checking a restaurant menu before ordering.
+
+[7.] HEAD → Similar to GET, but it only returns headers (no full content).
+◾ Like looking at a book cover without opening it.
+
+[8.] TRACE→ Used to test or debug the connection.
+◾ It shows how your request travels through the network.
+
+[9.] CONNECT → Creates a direct tunnel between your device and the server.
+◾ Often used for secure (HTTPS) connections.
+
+----------------
+Important Frontend Concepts Checklist-
+
+1. Pagination
+
+2. Infinite Scrollbar
+
+3. Debouncing
+
+4. Websocket
+
+5. REST vs GraphQl APIs
+
+6. Local Storage vs Cookies
+
+7. Authentication vs Authorization
+
+8. Redux
+
+9. Lazy Loading
+
+10. Code Splitting
+
+11. Bundle Size Optimization
+
+12. Tree Shaking
+
+13. Memoization (useMemo, useCallback)
+
+14. Caching (Client + Server)
+
+15. CSR vs SSR vs SSG vs ISR
+
+16. Core Web Vitals (LCP, INP, CLS)
+
+17. Cross Browser Compatibility
+
+18. Optimistic UI Updates
+
+19. Suspense (React)
+
+20. Image Optimization (WebP, AVIF)
+
+21. Accessibility (a11y)
+
+22. Webpack
+
+23. Micro-frontend Architecture
+
+24. Testing- RTL, Jest, Playwright
+
+25. Polyfills, Babel
+
+----------------------
+𝟭. 𝗖𝗮𝗹𝗹 𝗦𝘁𝗮𝗰𝗸
+ - 𝗪𝗵𝗮𝘁 𝗶𝘀 𝗶𝘁?
+ The Call Stack is where JavaScript keeps track of function calls. It is a stack structure that handles synchronous code execution.
+ - 𝗛𝗼𝘄 𝗱𝗼𝗲𝘀 𝗶𝘁 𝘄𝗼𝗿𝗸?
+1. When a function is invoked, it’s pushed onto the stack.
+2. Once it finishes, it’s popped off.
+3. If an error occurs during execution, it’s thrown from the stack.
+
+𝟮. 𝗘𝘃𝗲𝗻𝘁 𝗤𝘂𝗲𝘂𝗲 (𝗖𝗮𝗹𝗹𝗯𝗮𝗰𝗸 𝗤𝘂𝗲𝘂𝗲)
+ - 𝗪𝗵𝗮𝘁 𝗶𝘀 𝗶𝘁?
+ The Event Queue (also known as the callback queue) stores events that are to be processed asynchronously, like events triggered by a setTimeout or DOM events.
+ - 𝗛𝗼𝘄 𝗱𝗼𝗲𝘀 𝗶𝘁 𝘄𝗼𝗿𝗸?
+1. When the Call Stack is empty, the Event Loop checks the Event Queue.
+2. It then pushes the next task onto the stack for execution.
+
+
+𝟯. 𝗠𝗶𝗰𝗿𝗼𝘁𝗮𝘀𝗸 𝗤𝘂𝗲𝘂𝗲
+ - 𝗪𝗵𝗮𝘁 𝗶𝘀 𝗶𝘁?
+ The Microtask Queue holds tasks that need to be executed after the currently executing script, but before any events in the event queue. Microtasks include promise callbacks and other tasks like MutationObserver.
+ - 𝗛𝗼𝘄 𝗱𝗼𝗲𝘀 𝗶𝘁 𝘄𝗼𝗿𝗸?
+ Once the call stack is empty and before the event queue is processed, the event loop picks up and processes tasks in the microtask queue. This ensures that promises are resolved before other events are processed.
+
+𝟰. 𝗘𝘃𝗲𝗻𝘁 𝗟𝗼𝗼𝗽
+ - 𝗪𝗵𝗮𝘁 𝗶𝘀 𝗶𝘁?
+ The Event Loop is the mechanism that allows JavaScript to perform non-blocking operations by managing the order in which tasks are executed from the call stack, event queue, and microtask queue.
+- 𝗛𝗼𝘄 𝗱𝗼𝗲𝘀 𝗶𝘁 𝘄𝗼𝗿𝗸?
+ The event loop constantly checks the call stack. If the call stack is empty, it checks the microtask queue and processes any pending microtasks. After all microtasks are processed, the event loop picks events from the event queue for execution.
+
+𝗞𝗲𝘆 𝗣𝗼𝗶𝗻𝘁:
+ Microtasks are always executed before the event queue. This is why Promise.then() is processed before setTimeout().
+
+𝟱. 𝗦𝗲𝘁𝗧𝗶𝗺𝗲𝗼𝘂𝘁 𝗮𝗻𝗱 𝗦𝗲𝘁𝗜𝗻𝘁𝗲𝗿𝘃𝗮𝗹
+ - 𝗪𝗵𝗮𝘁 𝗶𝘀 𝗶𝘁?
+ setTimeout() and setInterval() are used to schedule code execution after a specified time, but they are added to the event queue and are processed after all synchronous code and microtasks.
+- 𝗛𝗼𝘄 𝗱𝗼𝗲𝘀 𝗶𝘁 𝘄𝗼𝗿𝗸?
+ The setTimeout() and setInterval() tasks are executed after the current script is finished executing, which is why you may see asynchronous code run after synchronous code (even if it's scheduled for immediate execution).
+
+
+ -------
+
+ rad this https://github.com/analogjs/angular-skills
+
+ ------------------🚀 Understanding Client-Side Rendering (CSR) in Angular
+
+As an Angular developer, it’s important to understand how Client-Side Rendering (CSR) works and where it fits best in modern web applications.
+
+🔹 What is Client-Side Rendering?
+CSR means the browser loads a minimal HTML file first, and Angular takes over to render the UI using JavaScript.
+
+📌 Key Topics in Angular CSR:
+✅ How Angular bootstraps the application
+✅ Role of index.html and root component
+✅ Lazy loading modules for better performance
+✅ Change detection & component lifecycle
+✅ Routing in CSR
+✅ API calls and data rendering
+✅ State management (NgRx / Services)
+✅ Performance optimization techniques
+✅ SEO challenges in CSR
+✅ Difference between CSR vs SSR
+
+💡 When to use CSR?
+✔ Dashboards
+✔ Admin panels
+✔ Internal tools
+✔ Apps where SEO is not a priority
+
+📈 CSR provides:
+Faster UI interactions
+Rich user experience
+Easy development & debugging
+
+
+-------------------------
+1. Flatten an array
+
+```javascript
+const flatten = arr => arr.flat(Infinity);
+```
+
+2. Check if object is empty
+
+```javascript
+const isEmpty = obj => Object.keys(obj).length === 0;
+```
+
+3. Generate random hex color
+
+```javascript
+const randomHex = () => `#${Math.floor(Math.random()*0xffffff).toString(16).padEnd(6,"0")}`;
+```
+
+4. Remove duplicates from array
+
+```javascript
+const unique = arr => [...new Set(arr)];
+```
+
+5. Capitalize first letter
+
+```javascript
+const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
+```
+
+6. Copy to clipboard
+
+```javascript
+const copyToClipboard = text => navigator.clipboard.writeText(text);
+```
+
+7. Get current URL params
+
+```javascript
+const params = new URLSearchParams(window.location.search);
+```
+
+8. Detect dark mode preference
+
+```javascript
+const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+```
+
+9. Debounce function
+
+```javascript
+const debounce = (func, wait) => {
+ let timeout;
+ return (...args) => {
+ clearTimeout(timeout);
+ timeout = setTimeout(() => func.apply(this, args), wait);
+ };
+};
+```
+
+10. Wait for a set time
+
+```javascript
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+```
+
+11. Toggle boolean in state (React-friendly)
+
+```javascript
+const toggle = prev => !prev;
+```
+
+12. Sort by key
+
+```javascript
+const sortBy = (arr, key) => arr.sort((a, b) => a[key] > b[key] ? 1 : -1);
+```
+
+13. Convert RGB to hex
+
+```javascript
+const rgbToHex = (r,g,b) => "#" + ((1<<24) + (r<<16) + (g<<8) + b).toString(16).slice(1);
+```
+
+14. Validate email
+
+```javascript
+const isValidEmail = email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+```
+
+15. Group array by property
+
+```javascript
+const groupBy = (arr, key) => arr.reduce((acc, obj) => {
+ acc[obj[key]] = (acc[obj[key]] || []).concat(obj);
+ return acc;
+}, {});
+```
+
+16. Get average of array
+
+```javascript
+const average = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+```
+
+17. Random item from array
+
+```javascript
+const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
+```
+
+18. Scroll to top smoothly
+
+```javascript
+const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+```
+
+19. Format number with commas
+
+```javascript
+const formatNumber = num => num.toLocaleString();
+```
+
+20. Check if array includes all values
+
+```javascript
+const includesAll = (arr, values) => values.every(v => arr.includes(v));
+----------------------
