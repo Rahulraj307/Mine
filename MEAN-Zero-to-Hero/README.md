@@ -4,6 +4,17 @@
 
 ---
 
+## 🧭 Quick Navigation
+
+| Resource | Description |
+|----------|-------------|
+| [📍 NAVIGATION.md](./NAVIGATION.md) | Quick-jump to any topic |
+| [📊 PROGRESS.md](./PROGRESS.md) | Track your learning |
+| [🚀 TaskMaster Pro](./08_Projects/mean-taskmaster-pro/) | Full MEAN stack project |
+| [💼 Interview Q&A](./12_Interview_QnA/) | 100+ interview questions |
+
+---
+
 ## 📋 Table of Contents
 
 1. [How to Use This Repository](#how-to-use-this-repository)
