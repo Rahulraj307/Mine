@@ -13,6 +13,7 @@
 | JavaScript | [JS_Master_QnA.md](./JS_Master_QnA.md) | Closures, async, event loop, this |
 | TypeScript | [TypeScript_Master_QnA.md](./TypeScript_Master_QnA.md) | Types, generics, decorators |
 | Angular | [Angular_Master_QnA.md](./Angular_Master_QnA.md) | Components, DI, lifecycle, change detection |
+| Angular Senior | [Angular_Senior_50_QnA.md](./Angular_Senior_50_QnA.md) | Architecture, CD, RxJS, Forms, Auth |
 | RxJS | [RxJS_Master_QnA.md](./RxJS_Master_QnA.md) | Observables, operators, patterns |
 | Node.js | [Node_Master_QnA.md](./Node_Master_QnA.md) | Event loop, streams, clustering |
 | MongoDB | [MongoDB_Master_QnA.md](./MongoDB_Master_QnA.md) | Queries, aggregation, indexing |

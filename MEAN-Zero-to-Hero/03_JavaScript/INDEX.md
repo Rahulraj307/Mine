@@ -4,6 +4,15 @@
 
 ---
 
+## 📚 Complete Guide
+
+| File | Description |
+|------|-------------|
+| **[complete-roadmap.md](./complete-roadmap.md)** | Full JavaScript roadmap based on [roadmap.sh](https://roadmap.sh/javascript) |
+| [README.md](./README.md) | Topic overview |
+
+---
+
 ## Topics
 
 | # | Topic | Description | Status |

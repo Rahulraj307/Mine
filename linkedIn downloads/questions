@@ -1,0 +1,64 @@
+🧠 𝗔𝗿𝗰𝗵𝗶𝘁𝗲𝗰𝘁𝘂𝗿𝗲 & 𝗗𝗲𝘀𝗶𝗴𝗻
+
+1. Explain Angular architecture in detail.
+2. How do you design a large-scale Angular application?
+3. How do you decide module boundaries in Angular?
+4. What is the difference between CoreModule and SharedModule?
+5. How do you prevent multiple service instances in Angular?
+6. Explain feature modules vs lazy-loaded modules.
+7. How do you structure Angular apps in micro-frontend architecture?
+8. How does Single-SPA / Module Federation work with Angular?
+9. How do you handle cross-cutting concerns in Angular?
+10. How do you enforce scalable folder structure?
+
+⚙️ 𝗖𝗵𝗮𝗻𝗴𝗲 𝗗𝗲𝘁𝗲𝗰𝘁𝗶𝗼𝗻 & 𝗣𝗲𝗿𝗳𝗼𝗿𝗺𝗮𝗻𝗰𝗲 (𝗩𝗘𝗥𝗬 𝗜𝗠𝗣𝗢𝗥𝗧𝗔𝗡𝗧)
+
+11. Explain Angular Change Detection in depth.
+12. What is Zone.js and why does Angular use it?
+13. Difference between Default and OnPush change detection.
+14. When does Angular run change detection?
+15. How do you optimize Angular performance?
+16. What are pure vs impure pipes?
+17. How do you avoid unnecessary re-renders?
+18. What is trackBy and why is it important?
+19. How do you debug performance issues in Angular?
+20. How do you handle large lists (10k+ rows)?
+
+🔄 𝗥𝘅𝗝𝗦 & 𝗥𝗲𝗮𝗰𝘁𝗶𝘃𝗲 𝗣𝗿𝗼𝗴𝗿𝗮𝗺𝗺𝗶𝗻𝗴 (𝗠𝗔𝗡𝗗𝗔𝗧𝗢𝗥𝗬)
+
+21. Explain Observable vs Promise.
+22. What are cold and hot observables?
+23. Difference between Subject, BehaviorSubject, ReplaySubject.
+24. Explain mergeMap vs switchMap vs concatMap vs exhaustMap.
+25. When would you use switchMap over mergeMap?
+26. What are higher-order observables?
+27. How do you manage subscriptions properly?
+28. What is async pipe and why is it important?
+29. Explain multicasting in RxJS.
+30. How do you handle error handling in RxJS streams?
+
+🧾 𝗙𝗼𝗿𝗺𝘀 (𝗔𝗱𝘃𝗮𝗻𝗰𝗲𝗱 𝗟𝗲𝘃𝗲𝗹)
+
+31. Template-driven vs Reactive forms (deep comparison).
+32. How do Reactive Forms internally work?
+33. What is FormArray and when do you use it?
+34. How do you build dynamic forms?
+35. How do you implement custom validators?
+36. How do you implement async validators?
+37. How do you handle cross-field validation?
+38. How do you manage large complex forms?
+39. How do you improve form performance?
+40. How do you reuse form logic?
+
+🔐 𝗔𝘂𝘁𝗵𝗲𝗻𝘁𝗶𝗰𝗮𝘁𝗶𝗼𝗻 & 𝗦𝗲𝗰𝘂𝗿𝗶𝘁𝘆
+
+41. How do you implement authentication in Angular?
+42. JWT vs Session-based authentication.
+43. Where do you store tokens and why?
+44. How do HTTP interceptors work internally?
+45. How do you handle token refresh?
+46. What are route guards and types of guards?
+47. How do you handle role-based access control?
+48. How do you protect Angular apps from XSS / CSRF?
+49. How do you secure environment configurations?
+50. How do you handle logout across multiple tabs?

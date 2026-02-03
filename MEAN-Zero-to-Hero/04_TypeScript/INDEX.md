@@ -4,6 +4,16 @@
 
 ---
 
+## 📚 Complete Guide
+
+| File | Description |
+|------|-------------|
+| **[complete-roadmap.md](./complete-roadmap.md)** | Full TypeScript roadmap based on [roadmap.sh](https://roadmap.sh/typescript) |
+| [theory.md](./theory.md) | Quick reference guide |
+| [README.md](./README.md) | Topic overview |
+
+---
+
 ## Topics
 
 | File | Description | Status |
