@@ -31,7 +31,7 @@
 | **CI/CD Pipelines** | You mention Docker but not GitHub Actions / Jenkins / CodePipeline. Every enterprise has CI/CD |
 | **API Versioning & Documentation** | Swagger/OpenAPI is expected. API versioning strategy is an interview topic |
 | **Error Handling & Observability** | Structured logging, error tracking (Sentry), health checks, APM. Production apps crash — how do you handle it? |
-| **WebSockets / Real-time** | Socket.io for real-time features. Common in dashboards, notifications, chat |
+| **Webhooks** | Event-driven integrations (Stripe, GitHub, AWS SNS). Every modern SaaS receives or sends webhooks — you need to know how to build, secure, and process them |
 | **Git Workflow** | Branching strategies (GitFlow, trunk-based), PR reviews, commit conventions. Sounds basic but senior roles expect mastery |
 | **Database Migrations** | Schema evolution in production. Tools like migrate-mongo or Knex migrations |
 | **Performance Profiling** | Lighthouse, Angular DevTools, Node.js profiling (`--inspect`, clinic.js) |
@@ -49,17 +49,17 @@
 
 ## 🔄 Reordered Priority (Your Plan vs. Correct Order)
 
-**Your order:** Frontend → Security → Databases → JS/TS → DevOps → Backend → Auth → AWS → NGINX → Tooling → GenAI → React → System Design
+**Your order:** Frontend → Security → Databases → JS/TS → DevOps → Backend → Auth → AWS → Tooling → GenAI → React → System Design
 
 **Correct order:**
 1. JS/TS Deep Foundations *(everything depends on this)*
 2. Angular Advanced *(your bread and butter)*
 3. Node.js + Express Backend *(the "Full Stack" part)*
-4. MongoDB + Redis *(data layer)*
-5. Auth + Security *(crosses frontend & backend)*
-6. Testing *(validates everything above)*
-7. Docker + CI/CD *(deployment pipeline)*
-8. AWS Cloud *(production infrastructure)*
+4. Webhooks *(event-driven integrations — hot in job market)*
+5. MongoDB + Redis *(data layer)*
+6. Auth + Security *(crosses frontend & backend)*
+7. Testing *(validates everything above)*
+8. Docker + CI/CD + AWS Serverless *(deployment + cloud)*
 9. System Design *(ties everything together)*
 10. Production & Enterprise Practices *(the senior differentiator)*
 
@@ -178,7 +178,47 @@ In production, every backend must handle: validation, authentication, authorizat
 
 ---
 
-## Phase 3: Databases & Caching (Days 41–55)
+## Phase 3: Webhooks — Event-Driven Integrations (Days 41–47)
+
+> Every modern SaaS sends and receives webhooks. Stripe sends payment events, GitHub sends push events, AWS SNS notifies your services. This is how the real world communicates — and interviewers know it.
+
+### ✔ Concepts to Master
+- **What Webhooks Are:** HTTP callbacks triggered by events — how they differ from polling, long-polling, and SSE
+- **Webhook Architecture:** Provider → HTTP POST → Your Endpoint → Process → Respond (200 OK within timeout)
+- **Security:** HMAC signature verification (e.g., Stripe uses `stripe-signature` header with HMAC-SHA256), IP whitelisting, replay attack prevention (timestamp validation)
+- **Reliability:** Idempotency keys (processing the same event twice shouldn't cause issues), retry handling with exponential backoff, dead-letter queues for failed events
+- **Async Processing:** Respond 200 immediately, push to queue (SQS/Bull), process asynchronously — never block the webhook response
+- **Real-World Providers:**
+  - **Stripe:** Payment intents, charge succeeded/failed, subscription lifecycle
+  - **GitHub:** Push events, PR events, workflow dispatch
+  - **AWS SNS:** Topic notifications, cross-service event delivery
+  - **SendGrid/Twilio:** Email delivery, SMS status updates
+
+### ✔ Practical Tasks
+- [ ] Build a webhook receiver in Express: accept POST, verify HMAC signature, respond 200, push to queue
+- [ ] Integrate with Stripe webhooks: handle `payment_intent.succeeded`, `payment_intent.failed`, `customer.subscription.created`
+- [ ] Integrate with GitHub webhooks: handle `push`, `pull_request` events, verify `X-Hub-Signature-256`
+- [ ] Implement idempotency: store processed event IDs in Redis/DB, skip duplicates
+- [ ] Build a webhook retry simulator: if processing fails, retry with exponential backoff (1s → 2s → 4s → 8s)
+- [ ] Create a webhook event log dashboard (Angular): show incoming events, status, payload, retry count
+
+### ✔ Common Mistakes
+- Doing heavy processing inside the webhook handler (should respond fast, process async)
+- Not verifying webhook signatures (anyone can POST to your endpoint)
+- Not handling duplicate events (providers retry on timeout — your handler must be idempotent)
+- Ignoring webhook timeouts (Stripe gives you 20 seconds — if you don't respond, it retries)
+- Not logging raw webhook payloads (makes debugging nearly impossible)
+
+### ✔ Interview Expectations
+- "How do you secure a webhook endpoint?"
+- "What happens if your webhook handler crashes mid-processing? How do you handle it?"
+- "How do you ensure idempotency in webhook processing?"
+- "Design a system to receive, validate, and process webhook events at scale"
+- "How do webhooks differ from polling? When would you use each?"
+
+---
+
+## Phase 4: Databases & Caching (Days 48–62)
 
 ### ✔ Concepts to Master
 
@@ -223,7 +263,7 @@ In production, every backend must handle: validation, authentication, authorizat
 
 ---
 
-## Phase 4: Authentication & Security (Days 56–65)
+## Phase 5: Authentication & Security (Days 63–72)
 
 ### ✔ Concepts to Master
 - **JWT Architecture:** Access tokens (short-lived, 15min), refresh tokens (long-lived, 7 days), token rotation, token blacklisting, storing tokens (httpOnly cookies vs localStorage — and why cookies win)
@@ -260,7 +300,7 @@ In production, every backend must handle: validation, authentication, authorizat
 
 ---
 
-## Phase 5: Testing Strategy (Days 66–72)
+## Phase 6: Testing Strategy (Days 73–79)
 
 > Most developers skip this. Senior engineers don't. This is a differentiator.
 
@@ -287,7 +327,7 @@ In production, every backend must handle: validation, authentication, authorizat
 
 ---
 
-## Phase 6: DevOps & Cloud Deployment (Days 73–85)
+## Phase 7: DevOps & Cloud Deployment (Days 80–95)
 
 ### ✔ Concepts to Master
 
@@ -311,8 +351,16 @@ In production, every backend must handle: validation, authentication, authorizat
 - **Serverless:** Lambda + API Gateway + DynamoDB pattern
 - **Monitoring:** CloudWatch (logs, metrics, alarms), X-Ray (tracing)
 
-**NGINX:**
-- Reverse proxy configuration, SSL termination, static file serving, gzip compression, load balancing basics
+**AWS Serverless (Deep-Dive — Hot Job Market):**
+- **Lambda:** cold starts, layers, versioning/aliases, environment variables, concurrency (reserved vs provisioned), event sources (API Gateway, S3, SQS, EventBridge, DynamoDB Streams)
+- **API Gateway:** REST API vs HTTP API (know the difference), Lambda authorizers, throttling, usage plans, stages (dev/staging/prod), custom domain mapping
+- **EventBridge:** Event-driven architecture, rules, scheduling (cron replacement), event patterns, cross-account events
+- **SQS + SNS:** Async processing patterns, dead-letter queues (DLQ), FIFO vs standard, fan-out pattern (SNS → SQS), message visibility timeout
+- **Step Functions:** Workflow orchestration, state machines, error handling, retry policies, parallel execution, human approval steps
+- **DynamoDB:** Single-table design, partition key strategies, GSI/LSI, on-demand vs provisioned capacity, DynamoDB Streams for change data capture
+- **SAM (Serverless Application Model):** `template.yaml`, `sam build`, `sam deploy`, local testing with `sam local invoke`
+- **CloudWatch:** Logs Insights queries, custom metrics, alarms, dashboards, Lambda-specific metrics (duration, throttles, errors)
+
 
 **Terraform (Basics):**
 - HCL syntax, providers, resources, state management, modules, `plan` → `apply` workflow
@@ -321,19 +369,26 @@ In production, every backend must handle: validation, authentication, authorizat
 - [ ] Dockerize your full-stack app (multi-stage Dockerfile for Angular, separate for Node)
 - [ ] Create a `docker-compose.yml` for local development (app + DB + Redis)
 - [ ] Set up GitHub Actions pipeline: lint → test → build → deploy
-- [ ] Deploy Node.js API to EC2 with NGINX reverse proxy + SSL (Let's Encrypt)
+- [ ] Build a complete serverless API: API Gateway + Lambda + DynamoDB (at least 5 endpoints)
+- [ ] Deploy Node.js API to EC2 (understand traditional deployment flow)
 - [ ] Deploy Angular app to S3 + CloudFront
 - [ ] Set up file uploads to S3 with pre-signed URLs
 - [ ] Create a Lambda function triggered by S3 upload (e.g., image resize)
+- [ ] Build an event-driven pipeline: S3 upload → EventBridge → Lambda → DynamoDB
+- [ ] Set up SQS dead-letter queue for failed Lambda invocations
+- [ ] Deploy a serverless app using SAM (`sam init` → `sam build` → `sam deploy`)
 - [ ] Write Terraform config for EC2 + Security Group + S3 bucket
-- [ ] Set up CloudWatch alarms for API error rates and latency
+- [ ] Set up CloudWatch alarms for API error rates, Lambda throttles, and latency
+- [ ] Create a Step Functions workflow for a multi-step process (e.g., user onboarding: validate → create account → send welcome email)
 
 ### ✔ Common Mistakes
 - Not using multi-stage Docker builds (bloated images)
 - Exposing environment variables in Docker images
 - Not setting up health checks in ECS/Docker
 - Using root user in containers
-- Not configuring NGINX to handle Angular routing (404 on refresh)
+- Not configuring CloudFront to handle Angular routing (404 on refresh → redirect to index.html)
+- Not setting Lambda concurrency limits (surprise AWS bills)
+- Not using dead-letter queues for failed async events (silent data loss)
 - Putting all AWS resources in default VPC with open security groups
 
 ### ✔ Interview Expectations
@@ -342,14 +397,17 @@ In production, every backend must handle: validation, authentication, authorizat
 - "Explain your CI/CD pipeline"
 - "What AWS services have you used? Explain the architecture"
 - "How do you handle SSL certificates?"
+- "Explain Lambda cold starts. How do you mitigate them?"
+- "When would you choose serverless vs containers vs EC2?"
+- "How do you handle async processing in a serverless architecture?"
 - Whiteboard: "Draw the infrastructure diagram for your deployed application"
 
 ---
 
-## Phase 7: System Design & Scalability (Days 86–100)
+## Phase 8: System Design & Scalability (Days 96–110)
 
 ### ✔ Concepts to Master
-- **Fundamentals:** Client-server, DNS, CDN, Load Balancing (L4 vs L7), Reverse Proxy
+- **Fundamentals:** Client-server, DNS, CDN, Load Balancing (L4 vs L7), API Gateway patterns
 - **Scaling:** Vertical vs Horizontal, Stateless services, Database replication (read replicas), Sharding, Connection pooling
 - **Caching:** CDN caching, application-level (Redis), database query cache, HTTP caching (ETags, Cache-Control)
 - **Databases at Scale:** Read replicas, write-ahead log, eventual consistency, CAP theorem, ACID vs BASE
@@ -369,7 +427,7 @@ In production, every backend must handle: validation, authentication, authorizat
 
 ### ✔ Practice Designs
 - [ ] Design a URL Shortener (basic starter)
-- [ ] Design a Chat Application (WebSockets, message queue, scaling)
+- [ ] Design a Webhook Event Processor (event ingestion, retry, idempotency, dead-letter)
 - [ ] Design a Notification System (multi-channel: email, push, SMS)
 - [ ] Design an E-commerce Platform (catalog, cart, checkout, inventory, payments)
 - [ ] Design a Rate Limiter (token bucket / sliding window)
@@ -383,7 +441,7 @@ In production, every backend must handle: validation, authentication, authorizat
 
 ---
 
-## Phase 8: Production & Enterprise Practices (Days 101–110)
+## Phase 9: Production & Enterprise Practices (Days 111–120)
 
 > This is what separates a developer from an engineer.
 
@@ -416,17 +474,19 @@ Phase 0: JS/TS Foundations
     │
     ├──► Phase 2: Node.js + Express (depends on JS/TS mastery)
     │         │
-    │         ├──► Phase 3: MongoDB + Redis (depends on backend skills)
+    │         ├──► Phase 3: Webhooks (depends on backend + Express knowledge)
     │         │
-    │         └──► Phase 4: Auth & Security (depends on both frontend + backend)
+    │         ├──► Phase 4: MongoDB + Redis (depends on backend skills)
+    │         │
+    │         └──► Phase 5: Auth & Security (depends on both frontend + backend)
     │
-    ├──► Phase 5: Testing (depends on Angular + Node knowledge)
+    ├──► Phase 6: Testing (depends on Angular + Node knowledge)
     │
-    ├──► Phase 6: Docker + AWS (depends on having a working app to deploy)
+    ├──► Phase 7: Docker + AWS Serverless (depends on having a working app to deploy)
     │
-    ├──► Phase 7: System Design (depends on understanding all layers)
+    ├──► Phase 8: System Design (depends on understanding all layers)
     │
-    └──► Phase 8: Production Practices (ties everything together)
+    └──► Phase 9: Production Practices (ties everything together)
 ```
 
 ### Why This Order?
@@ -435,7 +495,8 @@ Phase 0: JS/TS Foundations
 |-------|--------|
 | JS/TS first | Every framework builds on this. Weak JS = weak everything |
 | Angular before Node | Build confidence with what you know, then expand |
-| Node before MongoDB | You need an API to connect a database to |
+| Node before Webhooks | You need an API before you can receive webhook events |
+| Webhooks before MongoDB | Understand event processing before data layer design |
 | Auth after both | Authentication spans frontend + backend — you need both |
 | Testing after features | You need something to test first |
 | Docker/AWS after app is working | Deploy something real, not a hello-world |
@@ -520,7 +581,7 @@ Phase 0: JS/TS Foundations
 | Multi-tenant architecture | Enterprise design, data isolation |
 | JWT auth + refresh tokens + OAuth (Google) | Complete auth flow |
 | RBAC (Admin/Manager/Member) | Authorization architecture |
-| Real-time notifications (Socket.io) | WebSocket communication |
+| Webhook integrations (GitHub, Stripe) | Event-driven architecture, real-world integrations |
 | File attachments (S3 + pre-signed URLs) | AWS integration |
 | Redis caching for dashboard analytics | Caching strategy |
 | Rate limiting on API | Security + Redis |
@@ -529,9 +590,8 @@ Phase 0: JS/TS Foundations
 | Full test suite (unit + integration + E2E) | Testing maturity |
 | Dockerized with docker-compose | Container orchestration |
 | CI/CD with GitHub Actions | DevOps pipeline |
-| Deployed on AWS (EC2/ECS + S3 + CloudFront) | Cloud deployment |
-| NGINX reverse proxy + SSL | Production infrastructure |
-| Structured logging (Winston) | Observability |
+| Deployed on AWS (Lambda + API Gateway + S3 + CloudFront) | Serverless cloud deployment |
+| Structured logging (Winston / CloudWatch) | Observability |
 | Health checks + monitoring | Production readiness |
 
 ### Architecture Diagram
@@ -542,34 +602,48 @@ Phase 0: JS/TS Foundations
 └──────────────┘     └──────────────┘     └──────────────┘
                                                   │
                      ┌──────────────┐              │
-                     │    NGINX     │◀─────────────┘
-                     │ (Reverse     │
-                     │  Proxy+SSL)  │
+                     │ API Gateway  │◀─────────────┘
+                     │ (REST/HTTP   │
+                     │  + Auth)     │
                      └──────┬───────┘
                             │
-                     ┌──────▼───────┐     ┌──────────────┐
-                     │   Node.js    │────▶│    Redis      │
-                     │   Express    │     │  (Cache +     │
-                     │   API        │     │   Sessions)   │
-                     └──────┬───────┘     └──────────────┘
-                            │
-                     ┌──────▼───────┐     ┌──────────────┐
-                     │   MongoDB    │     │      S3       │
-                     │   Atlas      │     │  (File Store) │
-                     └──────────────┘     └──────────────┘
+              ┌─────────────┼─────────────┐
+              │             │             │
+       ┌──────▼──────┐ ┌────▼─────┐ ┌─────▼──────┐
+       │   Lambda    │ │  Lambda  │ │   Lambda   │
+       │ (API Logic) │ │ (Webhook │ │ (S3 Event  │
+       │             │ │ Handler) │ │ Processor) │
+       └──────┬──────┘ └────┬─────┘ └─────┬──────┘
+              │             │             │
+              ▼             ▼             ▼
+       ┌─────────────┐ ┌─────────┐ ┌───────────┐
+       │  MongoDB    │ │   SQS   │ │ DynamoDB  │
+       │  Atlas      │ │  Queue  │ │ (Events)  │
+       └─────────────┘ └─────────┘ └───────────┘
+              │
+       ┌──────▼──────┐     ┌──────────────┐
+       │   Redis     │     │      S3       │
+       │  (Cache)    │     │  (File Store) │
+       └─────────────┘     └──────────────┘
 ```
 
-## 🏆 Project 2: Real-Time Analytics Dashboard (Secondary — Shorter)
+## 🏆 Project 2: Webhooks + Serverless Integration Hub (Secondary)
 
-**Stack:** Angular + Socket.io + Node.js + Redis + Chart.js/D3
+> Demonstrates event-driven architecture, AWS Serverless mastery, and real-world integration skills.
+
+**Stack:** Angular + AWS Lambda + API Gateway + EventBridge + SQS + DynamoDB
 
 ### Features
-- Live WebSocket data streaming
-- Interactive charts with drill-down
-- Role-based views (admin sees all, user sees own data)
-- Redis pub/sub for real-time updates
-- Docker Compose setup
-- Dashboard performance optimized (virtual scrolling, OnPush, lazy charts)
+- Webhook receiver endpoints for GitHub (push events, PR events) and Stripe (payment events)
+- HMAC signature verification for webhook security
+- EventBridge for intelligent event routing based on event type
+- SQS queues for reliable async processing with dead-letter queues
+- DynamoDB for event storage with TTL-based cleanup
+- Lambda processors for each event type (e.g., auto-deploy on push, notify on payment)
+- Step Functions for multi-step event processing workflows
+- Angular dashboard showing webhook event history, status, and retry controls
+- SAM-based deployment (`sam deploy`)
+- Full CloudWatch monitoring with custom metrics
 
 ---
 
@@ -675,16 +749,17 @@ Clients → CDN → Load Balancer → API Gateway → Services → Cache → Dat
 
 | Period | Phase | Milestone |
 |--------|-------|-----------|
-| Days 1–5 | JS/TS Foundations | Can explain event loop, write TypeScript generics |
-| Days 6–20 | Angular Advanced | Production admin dashboard complete |
-| Days 21–40 | Node.js Backend | Enterprise REST API with docs + tests |
-| Days 41–55 | MongoDB + Redis | Database layer with caching integrated |
-| Days 56–65 | Auth + Security | Complete auth system, OWASP knowledge |
-| Days 66–72 | Testing | 80%+ coverage, all test types implemented |
-| Days 73–85 | Docker + AWS | Full app deployed on AWS with CI/CD |
-| Days 86–100 | System Design | Can design 5 systems on whiteboard |
-| Days 101–110 | Production Polish | Portfolio project production-ready |
-| Days 111–120 | Interview Prep | Mock interviews, resume ready |
+| Days 1–5 | Phase 0: JS/TS Foundations | Can explain event loop, write TypeScript generics |
+| Days 6–20 | Phase 1: Angular Advanced | Production admin dashboard complete |
+| Days 21–40 | Phase 2: Node.js Backend | Enterprise REST API with docs + tests |
+| Days 41–47 | Phase 3: Webhooks | Webhook receiver with Stripe/GitHub integration |
+| Days 48–62 | Phase 4: MongoDB + Redis | Database layer with caching integrated |
+| Days 63–72 | Phase 5: Auth + Security | Complete auth system, OWASP knowledge |
+| Days 73–79 | Phase 6: Testing | 80%+ coverage, all test types implemented |
+| Days 80–95 | Phase 7: Docker + AWS Serverless | Full app deployed serverless on AWS with CI/CD |
+| Days 96–110 | Phase 8: System Design | Can design 5 systems on whiteboard |
+| Days 111–120 | Phase 9: Production Polish | Portfolio project production-ready |
+| Days 121–130 | Interview Prep | Mock interviews, resume ready |
 
 ---
 
